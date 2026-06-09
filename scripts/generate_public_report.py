@@ -11,11 +11,11 @@ from typing import Any
 import pandas as pd
 
 
-SHOWCASE_PHASE10_RUNS = [
-    "ewma_candidate_sharpe565_retrain42_entry178_v4",
-    "ewma_candidate_span72_entry178_retrain28_v3",
-    "ewma",
-    "lightgbm",
+SHOWCASE_RUNS = [
+    ("ewma_candidate_sharpe565_retrain42_entry178_v4", "Best EWMA candidate"),
+    ("ewma_candidate_span72_entry178_retrain28_v3", "Higher-trade EWMA"),
+    ("ewma", "EWMA baseline"),
+    ("lightgbm", "LightGBM baseline"),
 ]
 
 
@@ -51,7 +51,7 @@ def _markdown_table(frame: pd.DataFrame) -> str:
 
 def _phase10_showcase_table(phase10_root: Path) -> pd.DataFrame:
     rows: list[dict[str, Any]] = []
-    for run_name in SHOWCASE_PHASE10_RUNS:
+    for run_name, candidate_label in SHOWCASE_RUNS:
         path = phase10_root / run_name / f"{run_name.split('_')[0]}_paper_phase10_summary.json"
         if run_name.startswith("lightgbm"):
             path = phase10_root / run_name / "lightgbm_paper_phase10_summary.json"
@@ -64,7 +64,8 @@ def _phase10_showcase_table(phase10_root: Path) -> pd.DataFrame:
         decision = data["decision"]
         rows.append(
             {
-                "run": run_name,
+                "candidate": candidate_label,
+                "run_id": run_name,
                 "profit_factor_net": metrics["profit_factor_net"],
                 "sharpe_ratio": metrics["sharpe_ratio"],
                 "num_trades": metrics["num_trades"],
@@ -80,6 +81,75 @@ def _phase10_showcase_table(phase10_root: Path) -> pd.DataFrame:
         ascending=[False, False, False],
     )
     return frame.reset_index(drop=True)
+
+
+def _public_candidate_table(frame: pd.DataFrame) -> pd.DataFrame:
+    return frame[
+        [
+            "candidate",
+            "profit_factor_net",
+            "sharpe_ratio",
+            "num_trades",
+            "total_return_pct",
+            "decision",
+        ]
+    ].rename(
+        columns={
+            "candidate": "Candidate",
+            "profit_factor_net": "Net PF",
+            "sharpe_ratio": "Sharpe",
+            "num_trades": "Trades",
+            "total_return_pct": "Total return (%)",
+            "decision": "Decision",
+        }
+    )
+
+
+def _public_calibration_table(frame: pd.DataFrame) -> pd.DataFrame:
+    return frame[
+        [
+            "scenario",
+            "entry_threshold",
+            "uncertainty_threshold",
+            "profit_factor_net",
+            "sharpe_ratio",
+            "num_trades",
+            "kill_event_rate",
+        ]
+    ].rename(
+        columns={
+            "scenario": "Scenario",
+            "entry_threshold": "Entry threshold",
+            "uncertainty_threshold": "Uncertainty threshold",
+            "profit_factor_net": "Net PF",
+            "sharpe_ratio": "Sharpe",
+            "num_trades": "Trades",
+            "kill_event_rate": "Kill-event rate",
+        }
+    )
+
+
+def _public_sensitivity_table(frame: pd.DataFrame) -> pd.DataFrame:
+    public = frame.copy()
+    public["scenario"] = public["scenario"].str.title()
+    public["policy"] = public["policy"].str.replace("_", " ", regex=False).str.title()
+    public["deployment_reason"] = (
+        public["deployment_reason"]
+        .str.replace("_", " ", regex=False)
+        .str.replace(";", "; ", regex=False)
+    )
+    return public.rename(
+        columns={
+            "scenario": "Scenario",
+            "policy": "Policy",
+            "profit_factor_net": "Net PF",
+            "sharpe_ratio": "Sharpe",
+            "num_trades": "Trades",
+            "kill_events": "Kill events",
+            "deployment_ready": "Ready",
+            "deployment_reason": "Readiness reason",
+        }
+    )
 
 
 def _top_calibration_table(path: Path, scenario_label: str, top_n: int = 5) -> pd.DataFrame:
@@ -160,7 +230,7 @@ def build_report(
     campaign = _campaign_snapshot(campaign_summary_path)
 
     snapshot = {
-        "project_positioning": "phase-gated trading research platform",
+        "project_positioning": "governed probabilistic trading research platform",
         "phase10_showcase": phase10.to_dict(orient="records"),
         "phase11_calibration_spot_top": spot.to_dict(orient="records"),
         "phase11_calibration_margin_top": margin.to_dict(orient="records"),
@@ -175,6 +245,12 @@ def build_report(
     }
 
     four_hour_frame = pd.DataFrame(four_hour_sensitivity)
+    candidate_public = _public_candidate_table(phase10)
+    spot_public = _public_calibration_table(spot)
+    margin_public = _public_calibration_table(margin)
+    sensitivity_public = _public_sensitivity_table(four_hour_frame)
+    selection_mode = campaign["selection_mode"].replace("_", " ")
+    readiness_reason = campaign["deployment_readiness"]["reason"].replace("_", " ").replace(";", "; ")
 
     report = f"""# Public Evidence Snapshot
 
@@ -184,35 +260,35 @@ This file is generated from selected experiment artifacts and is intended for pu
 
 `chronos-plg` should be read as a research platform, not as a finished live-trading system.
 
-## Phase 10 Showcase Runs
+## Futures Candidate Comparison
 
-{_markdown_table(phase10)}
+{_markdown_table(candidate_public)}
 
-## Phase 11 Spot Threshold Calibration: Top Active Candidates
+## Spot Threshold Calibration: Top Active Candidates
 
-{_markdown_table(spot)}
+{_markdown_table(spot_public)}
 
-## Phase 11 Margin Threshold Calibration: Top Active Candidates
+## Margin Threshold Calibration: Top Active Candidates
 
-{_markdown_table(margin)}
+{_markdown_table(margin_public)}
 
 ## Fixed Campaign Snapshot
 
 - Campaign window: `{campaign['campaign_window']['start']}` to `{campaign['campaign_window']['end']}`
-- Selection mode: `{campaign['selection_mode']}`
+- Selection mode: `{selection_mode}`
 - Profit factor net: `{campaign['metrics']['profit_factor_net']:.4f}`
 - Sharpe ratio: `{campaign['metrics']['sharpe_ratio']:.4f}`
 - Trades: `{campaign['metrics']['num_trades']}`
 - Total return: `{campaign['metrics']['total_return'] * 100.0:.2f}%`
 - Kill events: `{campaign['metrics']['kill_events']}`
 - Deployment ready: `{campaign['deployment_readiness']['ready']}`
-- Readiness reason: `{campaign['deployment_readiness']['reason']}`
+- Readiness reason: `{readiness_reason}`
 - Promotion recommended: `{campaign['promotion_recommendation']['recommend_promotion']}`
 - Completion gate passed: `{campaign['completion_gate']['passed']}`
 
 ## 4h Threshold Sensitivity Check
 
-{_markdown_table(four_hour_frame)}
+{_markdown_table(sensitivity_public)}
 
 ## Interpretation
 

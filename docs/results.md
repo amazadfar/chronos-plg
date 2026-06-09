@@ -16,7 +16,7 @@ What it does justify:
 - the governance stack is strong enough to reject those regions when they are not stable or promotion-ready
 - the research process is producing informative negative evidence rather than vanity metrics
 
-## Phase 10 Showcase
+## Futures Candidate Comparison
 
 | Run | PF Net | Sharpe | Trades | Total Return | Decision |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -29,9 +29,9 @@ The strongest public takeaway from this section is not just that a tuned EWMA ca
 
 ## Best Observed Futures Candidate
 
-![Best phase 10 futures candidate equity](assets/phase10_best_equity.png)
+![Best futures candidate equity](assets/phase10_best_equity.png)
 
-![Phase 10 cost breakdown](assets/phase10_cost_breakdown.png)
+![Execution cost breakdown](assets/phase10_cost_breakdown.png)
 
 Observed strengths:
 - positive net PF
@@ -43,7 +43,7 @@ Observed blockers:
 - regime stability concerns remain
 - kill-switch and policy logic still matter
 
-## Phase 11 Threshold Calibration
+## Threshold Calibration
 
 The 1h threshold calibration work explored a different failure mode.
 
@@ -87,13 +87,13 @@ The fixed-candidate campaign result for the inspected spot candidate remained ne
 - deployment readiness: `False`
 - promotion recommendation: `False`
 
-![Phase 11 campaign spot equity](assets/phase11_campaign_spot_equity.png)
+![Fixed-window spot campaign equity](assets/phase11_campaign_spot_equity.png)
 
-![Phase 11 campaign kill-switch path](assets/phase11_campaign_kill_switch.png)
+![Campaign kill-switch path](assets/phase11_campaign_kill_switch.png)
 
 This is a strong public result, even though it is negative. It demonstrates that the repo’s control layer is doing real work instead of allowing a weak candidate to drift toward production.
 
-## New This Session: 4h Threshold Sensitivity
+## 4h Threshold Sensitivity
 
 To make the timeframe story more concrete, a matched 4h spot and 4h margin replay was run during this publication pass.
 

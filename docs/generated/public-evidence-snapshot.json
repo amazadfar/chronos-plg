@@ -1,8 +1,9 @@
 {
-  "project_positioning": "phase-gated trading research platform",
+  "project_positioning": "governed probabilistic trading research platform",
   "phase10_showcase": [
     {
-      "run": "ewma_candidate_sharpe565_retrain42_entry178_v4",
+      "candidate": "Best EWMA candidate",
+      "run_id": "ewma_candidate_sharpe565_retrain42_entry178_v4",
       "profit_factor_net": 1.173851099607019,
       "sharpe_ratio": 0.5652507801901155,
       "num_trades": 76,
@@ -13,7 +14,8 @@
       "decision_reason": "partial_pass_requires_iteration"
     },
     {
-      "run": "ewma_candidate_span72_entry178_retrain28_v3",
+      "candidate": "Higher-trade EWMA",
+      "run_id": "ewma_candidate_span72_entry178_retrain28_v3",
       "profit_factor_net": 1.1212709977497273,
       "sharpe_ratio": 0.451235125772597,
       "num_trades": 100,
@@ -24,7 +26,8 @@
       "decision_reason": "partial_pass_requires_iteration"
     },
     {
-      "run": "ewma",
+      "candidate": "EWMA baseline",
+      "run_id": "ewma",
       "profit_factor_net": 1.0521323715317406,
       "sharpe_ratio": 0.10005302517853053,
       "num_trades": 26,
@@ -35,7 +38,8 @@
       "decision_reason": "primary_or_severe_risk_gate_failed"
     },
     {
-      "run": "lightgbm",
+      "candidate": "LightGBM baseline",
+      "run_id": "lightgbm",
       "profit_factor_net": 0.22392419404156538,
       "sharpe_ratio": -2.433731154360648,
       "num_trades": 36,

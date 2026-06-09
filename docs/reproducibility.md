@@ -16,7 +16,13 @@ pip install -e ".[dev]"
 
 ## Validation Commands
 
-Run the automated test suite:
+Run the complete public-release validation:
+
+```bash
+make validate-public
+```
+
+Or run the checks individually. Automated tests:
 
 ```bash
 make test

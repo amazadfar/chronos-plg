@@ -2,7 +2,7 @@
 
 This is a compact public log of representative experiment outcomes. It is not a full dump of every local run.
 
-## Card 1: Phase 10 Futures EWMA Candidate
+## Card 1: Futures EWMA Candidate
 
 ### Hypothesis
 
@@ -27,7 +27,7 @@ This is the strongest inspected evidence that the system can locate a positive r
 
 The governance layer still found readiness / stability issues. That is an important result, not an embarrassment.
 
-## Card 2: Phase 11 Spot Threshold Calibration
+## Card 2: Spot Threshold Calibration
 
 ### Hypothesis
 
@@ -48,7 +48,7 @@ Lowering entry thresholds on the 1h spot track might raise trade count without d
 
 Higher activity alone did not solve the problem.
 
-## Card 3: Phase 11 Fixed Spot Campaign
+## Card 3: Fixed-Window Spot Campaign
 
 ### Hypothesis
 

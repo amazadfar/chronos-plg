@@ -16,7 +16,7 @@
 
 Publish this project as:
 
-`A phase-gated BTC trading research platform with cost-aware evaluation, paper-trading governance, and honest positive / negative evidence.`
+`A governed BTC trading research platform with cost-aware evaluation, paper-trading readiness controls, and honest positive / negative evidence.`
 
 Do not publish it as:
 
@@ -26,7 +26,7 @@ That would be stronger wording than the current evidence supports.
 
 ## Suggested GitHub Repo Description
 
-`Phase-gated BTC trading research platform with probabilistic forecasting, cost-aware backtesting, paper-trading governance, and curated public evidence.`
+`Governed BTC trading research platform with probabilistic forecasting, cost-aware backtesting, paper-trading readiness controls, and curated public evidence.`
 
 ## Suggested Topics
 

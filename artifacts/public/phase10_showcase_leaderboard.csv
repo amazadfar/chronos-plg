@@ -1,5 +1,5 @@
-run,profit_factor_net,sharpe_ratio,num_trades,total_return_pct,max_drawdown_pct,total_costs_pct,decision,decision_reason
-ewma_candidate_sharpe565_retrain42_entry178_v4,1.173851099607019,0.5652507801901155,76,1.0547880875436233,-1.434022467114876,1.838168335712359,ITERATE,partial_pass_requires_iteration
-ewma_candidate_span72_entry178_retrain28_v3,1.1212709977497273,0.451235125772597,100,0.9329438707592175,-1.858432737527022,2.4410111978803912,ITERATE,partial_pass_requires_iteration
-ewma,1.0521323715317406,0.10005302517853053,26,0.08542766075962938,-0.6519046314678811,0.5123854426776856,NO_GO,primary_or_severe_risk_gate_failed
-lightgbm,0.22392419404156538,-2.433731154360648,36,-1.34635024815698,-1.4378086301544233,1.4134555362818597,NO_GO,primary_or_severe_risk_gate_failed
+candidate,run_id,profit_factor_net,sharpe_ratio,num_trades,total_return_pct,max_drawdown_pct,total_costs_pct,decision,decision_reason
+Best EWMA candidate,ewma_candidate_sharpe565_retrain42_entry178_v4,1.173851099607019,0.5652507801901155,76,1.0547880875436233,-1.434022467114876,1.838168335712359,ITERATE,partial_pass_requires_iteration
+Higher-trade EWMA,ewma_candidate_span72_entry178_retrain28_v3,1.1212709977497273,0.451235125772597,100,0.9329438707592175,-1.858432737527022,2.4410111978803912,ITERATE,partial_pass_requires_iteration
+EWMA baseline,ewma,1.0521323715317406,0.10005302517853053,26,0.08542766075962938,-0.6519046314678811,0.5123854426776856,NO_GO,primary_or_severe_risk_gate_failed
+LightGBM baseline,lightgbm,0.22392419404156538,-2.433731154360648,36,-1.34635024815698,-1.4378086301544233,1.4134555362818597,NO_GO,primary_or_severe_risk_gate_failed

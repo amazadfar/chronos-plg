@@ -22,7 +22,7 @@ This page separates implementation status from empirical status.
 
 ### Evidence-positive
 
-- phase-gated research architecture is real and validated
+- governed research architecture is implemented and validated
 - strongest futures EWMA candidate reaches `PF Net > 1.0`
 - 4h looser-threshold spot and margin checks recover PF-positive, positive-Sharpe regions
 - governance layers actively prevent overclaiming and premature promotion

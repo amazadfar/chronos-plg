@@ -1,46 +1,66 @@
 # Chronos-PLG
 
-Chronos-PLG is a BTC trading research system built around probabilistic forecasts, realistic execution costs, walk-forward evaluation, robustness gates, and paper-trading governance.
+**Probabilistic forecasting, realistic execution economics, and model governance for BTC trading research.**
 
-This project is intentionally published as research, not as a claim of finished profitability.
+[View the repository](https://github.com/amazadfar/chronos-plg) · [Read the case study](case-study.md) · [Inspect the results](results.md)
 
-## What Makes It Interesting
+![Chronos-PLG research architecture](assets/system_architecture.png)
 
-- it treats costs and execution realism as first-class concerns
-- it promotes `ProfitFactorNet` and readiness gates over cosmetic headline metrics
-- it records both positive and negative evidence
-- it includes promotion-prevention logic, not just strategy logic
+## The Research Problem
 
-## Current Reading of the Evidence
+Forecast accuracy is not the same as a tradable edge, and a positive backtest is not the same as deployment readiness.
 
-- a tuned futures EWMA configuration reached `PF Net > 1.0` and positive Sharpe
-- that same candidate still failed readiness / promotion
-- 1h spot and margin calibration runs increased activity but did not cross profitability thresholds
-- the fixed campaign evidence remains negative and correctly recommends no promotion
+Chronos-PLG evaluates the entire chain:
 
-## Evidence Snapshot
+1. timestamp-safe market data
+2. probabilistic return forecasts
+3. cost-aware trading decisions
+4. walk-forward and stress evaluation
+5. paper-trading monitoring
+6. explicit promotion or rejection
 
-![Phase 10 showcase scatter](assets/phase10_showcase_scatter.png)
+## Current Evidence
 
-![Best phase 10 futures candidate equity](assets/phase10_best_equity.png)
+| Result | Net PF | Sharpe | Trades | Decision |
+| --- | ---: | ---: | ---: | --- |
+| Best inspected futures EWMA candidate | 1.1739 | 0.5653 | 76 | Iterate |
+| Fixed-window spot campaign | 0.8509 | -0.8225 | 94 | Do not promote |
+| 4h spot with looser threshold | 1.1517 | 1.3640 | 145 | Kill-switch blocked |
+| 4h margin with looser threshold | 1.1346 | 1.2199 | 145 | Kill-switch blocked |
 
-![1h threshold calibration](assets/phase11_threshold_calibration.png)
+The platform can locate partial positive-edge regions. It has not yet produced a candidate that satisfies the full readiness standard.
 
-## What Is In The Repo
+![Futures candidate comparison](assets/phase10_showcase_scatter.png)
 
-- data ingestion, contracts, and quality gates
-- leakage-aware labels and walk-forward evaluation
-- baseline models and a Chronos-2 candidate path
-- cost-aware backtesting and reporting
-- robustness and kill criteria
-- paper-trading replay, readiness policy, and capital-ramp logic
-- publication scripts for public summaries and figures
+## Why The Negative Results Matter
 
-## Read Next
+The fixed-window campaign remained negative, and the system refused promotion. The stronger 4h candidates produced attractive headline metrics but still triggered governance controls.
 
+That is the intended behavior. The control layer exists to distinguish an interesting result from a defensible deployment decision.
+
+![Campaign monitoring](assets/phase11_campaign_kill_switch.png)
+
+## Capabilities Demonstrated
+
+| Discipline | Implemented work |
+| --- | --- |
+| Probabilistic ML | quantile forecasting, interval-aware signals, calibration by regime |
+| Evaluation science | leakage controls, frozen walk-forward folds, matched baselines, uncertainty bands |
+| Quant systems | fees, slippage, funding, interest, execution transitions, market constraints |
+| ML engineering | modular runners, OOF stacking, reproducible CLIs, versioned artifacts |
+| Governance | robustness tests, kill switches, readiness checks, capital-ramp policy |
+
+## Research Boundary
+
+The repository is named for the Chronos research track, but the strongest public trading evidence is currently EWMA-led. Chronos is treated as a candidate model with strict backend provenance and fallback safeguards, not as a presumed winner.
+
+## Continue Reading
+
+- [Case Study](case-study.md)
+- [Portfolio Copy](portfolio-copy.md)
 - [Methodology](methodology.md)
-- [Project status](project-status.md)
 - [Results](results.md)
-- [Experiment log](experiment-log.md)
+- [Experiment Log](experiment-log.md)
+- [Project Status](project-status.md)
 - [Roadmap](roadmap.md)
 - [Reproducibility](reproducibility.md)

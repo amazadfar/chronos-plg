@@ -1,79 +1,87 @@
 # Chronos-PLG
 
-`chronos-plg` is a phase-gated BTC trading research platform focused on probabilistic forecasting, cost-aware backtesting, robustness screening, and paper-trading governance.
+[![CI](https://github.com/amazadfar/chronos-plg/actions/workflows/ci.yml/badge.svg)](https://github.com/amazadfar/chronos-plg/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/amazadfar/chronos-plg?display_name=tag)](https://github.com/amazadfar/chronos-plg/releases)
+[![Python](https://img.shields.io/badge/python-3.10%2B-2563a7)](pyproject.toml)
+[![License](https://img.shields.io/badge/license-MIT-0f766e)](LICENSE)
 
-This is not published as a finished trading product. It is published as a serious research system with real code, real experiment artifacts, and honest current findings.
+Chronos-PLG is a governed BTC trading research platform for probabilistic forecasting, leakage-safe evaluation, realistic execution modeling, robustness testing, and paper-trading readiness decisions.
 
-## Research Positioning
+It is published as a research system, not as a finished trading product or a claim of live profitability.
 
-The core question behind the project is simple:
+![Chronos-PLG research architecture](docs/assets/system_architecture.png)
 
-Can a probabilistic forecasting stack for BTC generate a positive net edge after realistic execution costs, and survive the governance checks required before any capital promotion?
+## Research Question
 
-The answer today is mixed:
-- the system can find PF-positive regions in some futures EWMA configurations
-- those regions still fail promotion because readiness, stability, and kill-switch constraints remain binding
-- 1h spot and margin calibration runs currently show the opposite failure mode: more trades, but weak PF and Sharpe
+Can probabilistic BTC forecasts produce a positive net edge after fees, slippage, funding, and financing costs, then remain stable enough to justify capital promotion?
 
-That mix is exactly why the project is interesting.
+The current answer is mixed:
 
-## Current Status
+- selected EWMA configurations reach positive net profit factor and positive Sharpe
+- those configurations still fail readiness checks because stability, observation depth, or kill-switch behavior remains binding
+- higher-activity 1h spot and margin configurations remain economically weak
+- Chronos infrastructure is implemented, but the strongest public evidence is currently EWMA-led
 
-### What is implemented
+That boundary is central to the project. Forecast quality, backtest performance, and deployment readiness are treated as separate claims.
 
-- contract-validated data ingestion and dataset building
-- leakage-aware labels and walk-forward evaluation
-- baseline model stack: `RandomWalk`, `EWMA`, `LightGBM`
-- Chronos-2 candidate runner with fallback/provenance safeguards
-- strategy layer with quantile signals, sizing, and regime-aware controls
-- realistic cost engine with fee, slippage, funding, and interest handling
-- robustness, decision reporting, and kill-criteria checks
-- paper-trading replay, monitoring dashboards, readiness policy, and capital-ramp logic
-- multi-objective parameter sweep and fixed-candidate promotion campaign tooling
+## Evidence Snapshot
 
-### What the evidence currently says
+| Experiment | Net PF | Sharpe | Trades | Research decision |
+| --- | ---: | ---: | ---: | --- |
+| Best inspected futures EWMA candidate | 1.1739 | 0.5653 | 76 | Iterate |
+| Higher-trade futures EWMA candidate | 1.1213 | 0.4512 | 100 | Iterate |
+| Fixed-window spot campaign | 0.8509 | -0.8225 | 94 | Do not promote |
+| 4h spot, looser entry threshold | 1.1517 | 1.3640 | 145 | Blocked by kill switch |
 
-- best inspected futures candidate:
-  - `ProfitFactorNet = 1.1739`
-  - `Sharpe = 0.5653`
-  - `Trades = 76`
-  - outcome still `ITERATE`, not promotion-ready
-- 1h spot threshold calibration:
-  - top active candidates reached `175-197` trades
-  - all remained below acceptable PF / Sharpe thresholds
-- fixed spot campaign:
-  - `ProfitFactorNet = 0.8509`
-  - `Sharpe = -0.8225`
-  - `Trades = 94`
-  - promotion recommendation: `False`
+The evidence supports a credible research-platform claim. It does not support a promotion-ready trading-strategy claim.
 
-See [docs/results.md](docs/results.md) and [artifacts/public/public_evidence_snapshot.md](artifacts/public/public_evidence_snapshot.md).
+![Futures candidate comparison](docs/assets/phase10_showcase_scatter.png)
 
-## Why This Repo Is Worth Publishing
+## Engineering Scope
 
-Most trading repos fail in one of two ways:
-- they are mostly notebooks and vague claims
-- they claim profitability without governance, cost realism, or negative-result reporting
+- contract-validated market-data ingestion and dataset construction
+- timestamp-safe labels and leakage-aware walk-forward evaluation
+- probabilistic model stack: Random Walk, EWMA, LightGBM quantile models, and Chronos
+- out-of-fold Chronos-to-LightGBM meta-model training
+- quantile signals, uncertainty abstention, position sizing, and regime controls
+- transition-aware execution costs: fees, slippage, funding, margin interest, and other charges
+- block-bootstrap, adverse-window, regime-exclusion, and cost-stress evaluation
+- model comparison, uncertainty bands, and explicit `GO / ITERATE / NO_GO` decisions
+- paper-trading replay, monitoring, kill switches, readiness policy, and capital-ramp recommendations
+- generated public evidence snapshots and publication figures
 
-This repo is valuable because it does the opposite:
-- it treats execution costs as first-class
-- it preserves phase gates and kill criteria
-- it stores auditable artifacts
-- it surfaces both positive and negative evidence
+## What This Demonstrates
 
-## Visual Snapshot
+| Capability | Evidence in the repository |
+| --- | --- |
+| ML engineering | modular model interfaces, quantile forecasting, OOF stacking, deterministic experiment metadata |
+| ML research | explicit hypotheses, matched baselines, negative-result reporting, calibration and regime analysis |
+| Quant engineering | realistic cost accounting, execution transitions, market-specific constraints, walk-forward backtesting |
+| MLOps / ResearchOps | CI, reproducible CLIs, frozen protocols, artifact manifests, generated evidence packs |
+| Model governance | robustness gates, kill criteria, paper readiness, capital-ramp and rollback policy |
 
-### Phase 10 showcase comparison
+## What The Project Does Not Claim
 
-![Phase 10 showcase scatter](docs/assets/phase10_showcase_scatter.png)
+- no guaranteed or production trading profitability
+- no live exchange execution
+- no claim that Chronos currently outperforms the strongest baseline
+- no claim that a short positive window is sufficient evidence for deployment
 
-### Best observed futures candidate: gross vs net equity
+## Representative Results
 
-![Best phase 10 equity](docs/assets/phase10_best_equity.png)
+### Best futures candidate: gross vs net equity
 
-### 1h threshold calibration: spot vs margin
+![Best futures candidate equity](docs/assets/phase10_best_equity.png)
+
+### Execution-cost decomposition
+
+![Execution cost breakdown](docs/assets/phase10_cost_breakdown.png)
+
+### 1h threshold calibration
 
 ![Threshold calibration](docs/assets/phase11_threshold_calibration.png)
+
+See [Results](docs/results.md) and the generated [Public Evidence Snapshot](artifacts/public/public_evidence_snapshot.md) for the full interpretation.
 
 ## Repository Layout
 
@@ -82,24 +90,22 @@ chronos-plg/
 ├── config/                  # scenario, cost, and runtime configuration
 ├── src/
 │   ├── data/                # ingestion, contracts, labels, quality gates
-│   ├── evaluation/          # walk-forward, calibration, multi-objective tooling
-│   ├── backtest/            # execution-cost-aware backtest engine and reports
-│   ├── strategy/            # signals, sizing, regimes, intent logic
-│   ├── robustness/          # kill criteria and stress testing
+│   ├── models/              # baselines, Chronos, and meta-models
+│   ├── evaluation/          # walk-forward, calibration, ranking, campaigns
+│   ├── backtest/            # execution-cost-aware engine and reports
+│   ├── strategy/            # signals, sizing, regimes, execution intent
+│   ├── robustness/          # stress tests and kill criteria
 │   ├── paper_trading/       # replay, monitoring, readiness, capital ramp
 │   └── reporting/           # decision and promotion reporting
-├── scripts/                 # CLI workflows and publication report generation
+├── scripts/                 # reproducible CLI workflows
 ├── tests/                   # automated validation
-├── docs/                    # publication docs and Pages-ready content
-├── artifacts/public/        # curated public evidence snapshots
-└── plans/                   # implementation plans and execution scaffolds
+├── docs/                    # GitHub Pages research publication
+└── artifacts/public/        # curated evidence snapshots
 ```
 
 ## Quick Start
 
-### Environment
-
-Create an isolated local environment before running code:
+Create an isolated environment:
 
 ```bash
 python -m venv .venv
@@ -108,40 +114,32 @@ pip install --upgrade pip
 pip install -e ".[dev]"
 ```
 
-### Validate the repo
+Validate the repository:
 
 ```bash
 make test
 make smoke
 ```
 
-### Generate the public evidence pack
+Regenerate the public evidence pack:
 
 ```bash
 make public-assets
 ```
 
-This generates:
-- curated evidence snapshots in `artifacts/public/`
-- publication figures in `docs/assets/`
+The full local dataset and experiment store are intentionally excluded from Git. See [Reproducibility](docs/reproducibility.md) and [Data Policy](data/README.md).
 
-## Reproducibility Notes
+## Research Documentation
 
-- the full local `data/` tree is intentionally not part of the public repo surface
-- curated evidence is published under `artifacts/public/`
-- public figures are generated into `docs/assets/`
-- commands and workflow details are documented in [docs/reproducibility.md](docs/reproducibility.md)
-
-## Key Docs
-
-- [Project landing page](docs/index.md)
+- [Project site](https://amazadfar.github.io/chronos-plg/)
+- [Case study](docs/case-study.md)
+- [Portfolio and resume copy](docs/portfolio-copy.md)
 - [Methodology](docs/methodology.md)
-- [Project status](docs/project-status.md)
 - [Results](docs/results.md)
 - [Experiment log](docs/experiment-log.md)
+- [Project status](docs/project-status.md)
 - [Roadmap](docs/roadmap.md)
 - [Reproducibility](docs/reproducibility.md)
-- [Implementation plan](plans/2026-04-11-portfolio-publication-implementation-plan.md)
 
 ## License
 

@@ -427,13 +427,13 @@ The first release should happen before the full research roadmap completes. Wait
   - stronger GitHub Pages landing page
   - "what failed and why it matters" section
 - Checklist:
-  - [ ] Add an architecture diagram covering data -> forecasts -> strategy -> cost engine -> robustness -> paper governance -> publication artifacts.
-  - [ ] Add a concise "Evidence Snapshot" table with current best, negative, and unresolved results.
-  - [ ] Add a "What this demonstrates" section mapping repo capabilities to ML engineering skills.
-  - [ ] Add a "What this does not claim" section.
-  - [ ] Add a Chronos narrative clarification: current strongest evidence is EWMA-led; Chronos is an active research track.
-  - [ ] Create a personal-site case-study draft with problem, system, evidence, failures, roadmap, and skills demonstrated.
-  - [ ] Add screenshots/figures that make the project visually scannable.
+  - [x] Add an architecture diagram covering data -> forecasts -> strategy -> cost engine -> robustness -> paper governance -> publication artifacts.
+  - [x] Add a concise "Evidence Snapshot" table with current best, negative, and unresolved results.
+  - [x] Add a "What this demonstrates" section mapping repo capabilities to ML engineering skills.
+  - [x] Add a "What this does not claim" section.
+  - [x] Add a Chronos narrative clarification: current strongest evidence is EWMA-led; Chronos is an active research track.
+  - [x] Create a personal-site case-study draft with problem, system, evidence, failures, roadmap, and skills demonstrated.
+  - [x] Add screenshots/figures that make the project visually scannable.
 - Validation:
   - docs render locally or on GitHub
   - all images are committed and correctly linked
@@ -1027,6 +1027,7 @@ The first release should happen before the full research roadmap completes. Wait
 |---|---|---|---|---|---|---|
 | 2026-06-08 | Planning | Created implementation roadmap from repository inspection and user portfolio goals | `plans/2026-06-08-chronos-portfolio-publication-research-roadmap-implementation-plan.md` | Plan artifact created | Draft | Awaiting owner review/approval before implementation |
 | 2026-06-09 | Milestone 1 / Phase 1 | Started clean public baseline execution: tightened ignore policy, corrected public metadata and environment docs, removed absolute local links from public docs, created repo `.venv` with Python 3.12, installed `.[dev]`, and staged intended public files only | `.gitignore`, `pyproject.toml`, `README.md`, `docs/reproducibility.md`, `docs/profitability-track.md`, staged public source/docs/artifacts | `.venv/bin/ruff check src config scripts tests --select E9,F63,F7,F82`; `.venv/bin/pytest -q`; `.venv/bin/python scripts/smoke_check.py`; `.venv/bin/python scripts/generate_public_report.py`; `.venv/bin/python scripts/plot_public_results.py` | Success | Raw/processed/full result data, `.venv`, IDE state, and `.specstory` remained ignored |
+| 2026-06-09 | Milestone 2 / Phase 3 | Reframed the public project around research architecture, evidence, engineering scope, limitations, and portfolio signal; replaced visible stage-number labels in charts/docs with descriptive research labels; added generated architecture visual, case study, portfolio copy, deterministic public validation target, and current GitHub Actions versions | `README.md`, `docs/index.md`, `docs/case-study.md`, `docs/portfolio-copy.md`, `docs/results.md`, `docs/experiment-log.md`, `scripts/plot_public_results.py`, `scripts/generate_public_report.py`, `docs/assets/*`, `Makefile`, `.github/workflows/ci.yml` | `make validate-public`; visual inspection of architecture, comparison, calibration, and sensitivity figures | Success | Internal artifact paths and schema identifiers retain historical stage numbers for compatibility; public-facing labels no longer expose them |
 
 ## Final Approval Gate
 - [x] Scope is clear
@@ -1036,4 +1037,4 @@ The first release should happen before the full research roadmap completes. Wait
 - [x] Validation is defined
 - [x] Rollout / rollback is defined where relevant
 - [x] Parallelizable work is clearly marked
-- [ ] Ready for implementation after owner approval
+- [x] Ready for implementation after owner approval
