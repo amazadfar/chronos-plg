@@ -1,0 +1,399 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "BTC 4H Dataset Schema",
+    "description": "Schema for the Chronos-2 BTC trading dataset",
+    "type": "object",
+    "properties": {
+        "index": {
+            "type": "string",
+            "format": "date-time",
+            "description": "UTC timestamp at 4h candle close"
+        },
+        "ohlcv": {
+            "type": "object",
+            "description": "Price and volume data from Binance Futures",
+            "properties": {
+                "open": {
+                    "type": "number",
+                    "description": "Opening price"
+                },
+                "high": {
+                    "type": "number",
+                    "description": "Highest price in candle"
+                },
+                "low": {
+                    "type": "number",
+                    "description": "Lowest price in candle"
+                },
+                "close": {
+                    "type": "number",
+                    "description": "Closing price"
+                },
+                "volume": {
+                    "type": "number",
+                    "description": "Base asset volume"
+                },
+                "quote_volume": {
+                    "type": "number",
+                    "description": "Quote asset volume (USDT)"
+                },
+                "trades": {
+                    "type": "integer",
+                    "description": "Number of trades"
+                }
+            }
+        },
+        "contract_metadata": {
+            "type": "object",
+            "description": "Exchange-specific symbol contract metadata",
+            "properties": {
+                "exchange": {
+                    "type": "string",
+                    "description": "Exchange name"
+                },
+                "market_type": {
+                    "type": "string",
+                    "description": "Market type (spot/margin/futures)"
+                },
+                "symbol": {
+                    "type": "string",
+                    "description": "Instrument symbol"
+                },
+                "base_asset": {
+                    "type": "string",
+                    "description": "Base asset"
+                },
+                "quote_asset": {
+                    "type": "string",
+                    "description": "Quote asset"
+                },
+                "tick_size": {
+                    "type": "number",
+                    "description": "Minimum price increment"
+                },
+                "lot_size": {
+                    "type": "number",
+                    "description": "Minimum quantity increment"
+                },
+                "min_qty": {
+                    "type": "number",
+                    "description": "Minimum order quantity"
+                },
+                "min_notional": {
+                    "type": "number",
+                    "description": "Minimum notional size"
+                }
+            }
+        },
+        "price_features": {
+            "type": "object",
+            "description": "Features derived from price data",
+            "properties": {
+                "return_1": {
+                    "type": "number",
+                    "description": "4h log return"
+                },
+                "return_6": {
+                    "type": "number",
+                    "description": "24h log return"
+                },
+                "return_42": {
+                    "type": "number",
+                    "description": "7d log return"
+                },
+                "realized_vol_6": {
+                    "type": "number",
+                    "description": "24h realized volatility"
+                },
+                "realized_vol_42": {
+                    "type": "number",
+                    "description": "7d realized volatility"
+                },
+                "atr_6": {
+                    "type": "number",
+                    "description": "6-period average true range"
+                },
+                "volume_zscore": {
+                    "type": "number",
+                    "description": "Volume z-score (42-period)"
+                }
+            }
+        },
+        "perps_features": {
+            "type": "object",
+            "description": "Perpetual futures microstructure features",
+            "properties": {
+                "funding_rate": {
+                    "type": "number",
+                    "description": "Current funding rate (lagged 1 period)"
+                },
+                "funding_rate_ma_6": {
+                    "type": "number",
+                    "description": "6-period MA of funding rate"
+                },
+                "open_interest": {
+                    "type": "number",
+                    "description": "Open interest in USD"
+                },
+                "oi_change_pct_1": {
+                    "type": "number",
+                    "description": "4h OI % change"
+                },
+                "oi_change_pct_6": {
+                    "type": "number",
+                    "description": "24h OI % change"
+                },
+                "long_liq_usd_est": {
+                    "type": "number",
+                    "description": "Estimated long liquidations (USD)"
+                },
+                "short_liq_usd_est": {
+                    "type": "number",
+                    "description": "Estimated short liquidations (USD)"
+                },
+                "liq_imbalance_est": {
+                    "type": "number",
+                    "description": "Liquidation imbalance (-1 to 1)"
+                },
+                "has_real_liq_data": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ],
+                    "description": "1 if liquidation values are from real data source"
+                },
+                "liq_data_source_code": {
+                    "type": "integer",
+                    "description": "Liquidation provenance: 1=real, 0=estimated, -1=missing"
+                }
+            }
+        },
+        "macro_features": {
+            "type": "object",
+            "description": "Macro indicators (lagged 1 day)",
+            "properties": {
+                "dxy_return_1d": {
+                    "type": "number",
+                    "description": "DXY daily return"
+                },
+                "spx_return_1d": {
+                    "type": "number",
+                    "description": "S&P 500 daily return"
+                },
+                "vix": {
+                    "type": "number",
+                    "description": "VIX level"
+                },
+                "yield_curve_2_10": {
+                    "type": "number",
+                    "description": "10Y - 2Y yield spread"
+                }
+            }
+        },
+        "event_flags": {
+            "type": "object",
+            "description": "Economic event indicators",
+            "properties": {
+                "is_fomc_day": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ],
+                    "description": "FOMC announcement day"
+                },
+                "is_cpi_day": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ],
+                    "description": "CPI release day"
+                },
+                "post_fomc_window": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ],
+                    "description": "Within 6h after FOMC"
+                },
+                "post_cpi_window": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ],
+                    "description": "Within 6h after CPI"
+                },
+                "is_event_window": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ],
+                    "description": "Any event window active"
+                }
+            }
+        },
+        "missingness_flags": {
+            "type": "object",
+            "description": "Data availability indicators",
+            "properties": {
+                "has_funding": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ]
+                },
+                "has_oi": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ]
+                },
+                "has_liqs": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ]
+                },
+                "has_real_liq_data": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ]
+                },
+                "has_macro": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ]
+                }
+            }
+        },
+        "labels": {
+            "type": "object",
+            "description": "Target variables for prediction",
+            "properties": {
+                "forward_return": {
+                    "type": "number",
+                    "description": "Next 4h log return (TARGET)"
+                },
+                "forward_realized_vol": {
+                    "type": "number",
+                    "description": "Next 24h realized vol"
+                },
+                "forward_direction": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ],
+                    "description": "1 if positive return"
+                },
+                "hist_q10": {
+                    "type": "number",
+                    "description": "10th percentile of recent returns"
+                },
+                "hist_q50": {
+                    "type": "number",
+                    "description": "Median of recent returns"
+                },
+                "hist_q90": {
+                    "type": "number",
+                    "description": "90th percentile of recent returns"
+                },
+                "regime": {
+                    "type": "string",
+                    "enum": [
+                        "normal",
+                        "trend",
+                        "chop",
+                        "panic"
+                    ]
+                },
+                "regime_trend": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ]
+                },
+                "regime_chop": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ]
+                },
+                "regime_panic": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1
+                    ]
+                },
+                "returns_7d": {
+                    "type": "number",
+                    "description": "7-day return (for regime calc)"
+                },
+                "vol_7d": {
+                    "type": "number",
+                    "description": "7-day volatility (for regime calc)"
+                }
+            }
+        }
+    },
+    "anti_leak_rules": {
+        "description": "Rules to prevent future information leakage",
+        "rules": [
+            "All features use data from time T-1 or earlier",
+            "Funding rate: use value from previous 8h window",
+            "Macro data: use previous day's close (1-day lag)",
+            "OI: use value from previous 4h snapshot",
+            "Liquidations: use aggregates from previous 4h window",
+            "Labels (forward_return, forward_realized_vol) use future data and are ONLY for training targets"
+        ]
+    },
+    "expected_ranges": {
+        "return_1": {
+            "min": -0.15,
+            "max": 0.15,
+            "typical": [
+                -0.03,
+                0.03
+            ]
+        },
+        "funding_rate": {
+            "min": -0.003,
+            "max": 0.003,
+            "typical": [
+                -0.0005,
+                0.001
+            ]
+        },
+        "realized_vol_6": {
+            "min": 0.005,
+            "max": 0.15,
+            "typical": [
+                0.01,
+                0.04
+            ]
+        },
+        "vix": {
+            "min": 10,
+            "max": 80,
+            "typical": [
+                15,
+                30
+            ]
+        }
+    }
+}

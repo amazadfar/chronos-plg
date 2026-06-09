@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test and lint caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Editors and local IDE state
+.idea/
+.vscode/
+.specstory/
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Local experiment outputs and datasets
+data/**
+!data/README.md
+
+# Keep curated public artifacts only
+artifacts/**
+!artifacts/
+!artifacts/public/
+!artifacts/public/**
+
+# Jupyter noise
+.ipynb_checkpoints/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Misc local files
+*.log

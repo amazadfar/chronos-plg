@@ -1,0 +1,5 @@
+scenario,policy,profit_factor_net,sharpe_ratio,num_trades,kill_events,deployment_ready,deployment_reason
+spot,default_threshold,0.0,0.0,0,0,False,insufficient_trades;profit_factor_below_threshold;sharpe_below_threshold
+spot,looser_threshold,1.1516600501423204,1.363972021770645,145,25,False,kill_switch_triggered
+margin,default_threshold,0.0,0.0,0,0,False,insufficient_trades;profit_factor_below_threshold;sharpe_below_threshold
+margin,looser_threshold,1.1345610473507217,1.2199380762610668,145,25,False,kill_switch_triggered

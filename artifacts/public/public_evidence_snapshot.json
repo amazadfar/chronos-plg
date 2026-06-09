@@ -1,0 +1,293 @@
+{
+  "project_positioning": "phase-gated trading research platform",
+  "phase10_showcase": [
+    {
+      "run": "ewma_candidate_sharpe565_retrain42_entry178_v4",
+      "profit_factor_net": 1.173851099607019,
+      "sharpe_ratio": 0.5652507801901155,
+      "num_trades": 76,
+      "total_return_pct": 1.0547880875436233,
+      "max_drawdown_pct": -1.434022467114876,
+      "total_costs_pct": 1.838168335712359,
+      "decision": "ITERATE",
+      "decision_reason": "partial_pass_requires_iteration"
+    },
+    {
+      "run": "ewma_candidate_span72_entry178_retrain28_v3",
+      "profit_factor_net": 1.1212709977497273,
+      "sharpe_ratio": 0.451235125772597,
+      "num_trades": 100,
+      "total_return_pct": 0.9329438707592175,
+      "max_drawdown_pct": -1.858432737527022,
+      "total_costs_pct": 2.4410111978803912,
+      "decision": "ITERATE",
+      "decision_reason": "partial_pass_requires_iteration"
+    },
+    {
+      "run": "ewma",
+      "profit_factor_net": 1.0521323715317406,
+      "sharpe_ratio": 0.10005302517853053,
+      "num_trades": 26,
+      "total_return_pct": 0.08542766075962938,
+      "max_drawdown_pct": -0.6519046314678811,
+      "total_costs_pct": 0.5123854426776856,
+      "decision": "NO_GO",
+      "decision_reason": "primary_or_severe_risk_gate_failed"
+    },
+    {
+      "run": "lightgbm",
+      "profit_factor_net": 0.22392419404156538,
+      "sharpe_ratio": -2.433731154360648,
+      "num_trades": 36,
+      "total_return_pct": -1.34635024815698,
+      "max_drawdown_pct": -1.4378086301544233,
+      "total_costs_pct": 1.4134555362818597,
+      "decision": "NO_GO",
+      "decision_reason": "primary_or_severe_risk_gate_failed"
+    }
+  ],
+  "phase11_calibration_spot_top": [
+    {
+      "candidate_id": 7,
+      "scenario": "spot",
+      "entry_threshold": 0.0015,
+      "uncertainty_threshold": 0.03,
+      "profit_factor_net": 0.8023517359935688,
+      "sharpe_ratio": -1.3652741959574646,
+      "num_trades": 175,
+      "kill_event_rate": 0.1075268817204301,
+      "max_drawdown_abs": 0.0451645778398956,
+      "composite_score": 0.4755038649710405
+    },
+    {
+      "candidate_id": 8,
+      "scenario": "spot",
+      "entry_threshold": 0.0015,
+      "uncertainty_threshold": 0.04,
+      "profit_factor_net": 0.810823172731907,
+      "sharpe_ratio": -1.381922040236017,
+      "num_trades": 197,
+      "kill_event_rate": 0.1290322580645161,
+      "max_drawdown_abs": 0.0451645778398956,
+      "composite_score": 0.4716641442375388
+    },
+    {
+      "candidate_id": 9,
+      "scenario": "spot",
+      "entry_threshold": 0.0015,
+      "uncertainty_threshold": 0.05,
+      "profit_factor_net": 0.810823172731907,
+      "sharpe_ratio": -1.381922040236017,
+      "num_trades": 197,
+      "kill_event_rate": 0.1290322580645161,
+      "max_drawdown_abs": 0.0451645778398956,
+      "composite_score": 0.4716641442375388
+    },
+    {
+      "candidate_id": 4,
+      "scenario": "spot",
+      "entry_threshold": 0.001,
+      "uncertainty_threshold": 0.03,
+      "profit_factor_net": 0.7932419327101078,
+      "sharpe_ratio": -1.7177542421898355,
+      "num_trades": 291,
+      "kill_event_rate": 0.1720430107526881,
+      "max_drawdown_abs": 0.0607500774928959,
+      "composite_score": 0.1354888430200968
+    },
+    {
+      "candidate_id": 5,
+      "scenario": "spot",
+      "entry_threshold": 0.001,
+      "uncertainty_threshold": 0.04,
+      "profit_factor_net": 0.8011759896171521,
+      "sharpe_ratio": -1.7264134102265254,
+      "num_trades": 316,
+      "kill_event_rate": 0.1935483870967742,
+      "max_drawdown_abs": 0.0633056375864531,
+      "composite_score": 0.1296840077780312
+    }
+  ],
+  "phase11_calibration_margin_top": [
+    {
+      "candidate_id": 7,
+      "scenario": "margin",
+      "entry_threshold": 0.0015,
+      "uncertainty_threshold": 0.03,
+      "profit_factor_net": 0.7979392704850765,
+      "sharpe_ratio": -1.399526030071732,
+      "num_trades": 175,
+      "kill_event_rate": 0.1075268817204301,
+      "max_drawdown_abs": 0.0456078716163502,
+      "composite_score": 0.4366179184600535
+    },
+    {
+      "candidate_id": 8,
+      "scenario": "margin",
+      "entry_threshold": 0.0015,
+      "uncertainty_threshold": 0.04,
+      "profit_factor_net": 0.8063718531239323,
+      "sharpe_ratio": -1.418284300232065,
+      "num_trades": 197,
+      "kill_event_rate": 0.1290322580645161,
+      "max_drawdown_abs": 0.0456078716163502,
+      "composite_score": 0.4306289177452889
+    },
+    {
+      "candidate_id": 9,
+      "scenario": "margin",
+      "entry_threshold": 0.0015,
+      "uncertainty_threshold": 0.05,
+      "profit_factor_net": 0.8063718531239323,
+      "sharpe_ratio": -1.418284300232065,
+      "num_trades": 197,
+      "kill_event_rate": 0.1290322580645161,
+      "max_drawdown_abs": 0.0456078716163502,
+      "composite_score": 0.4306289177452889
+    },
+    {
+      "candidate_id": 4,
+      "scenario": "margin",
+      "entry_threshold": 0.001,
+      "uncertainty_threshold": 0.03,
+      "profit_factor_net": 0.7885509354428244,
+      "sharpe_ratio": -1.761992969735155,
+      "num_trades": 291,
+      "kill_event_rate": 0.1720430107526881,
+      "max_drawdown_abs": 0.0616263569859072,
+      "composite_score": 0.0861209784609882
+    },
+    {
+      "candidate_id": 5,
+      "scenario": "margin",
+      "entry_threshold": 0.001,
+      "uncertainty_threshold": 0.04,
+      "profit_factor_net": 0.796467294725604,
+      "sharpe_ratio": -1.772594553352172,
+      "num_trades": 316,
+      "kill_event_rate": 0.1935483870967742,
+      "max_drawdown_abs": 0.0645795897358792,
+      "composite_score": 0.0781571936861233
+    }
+  ],
+  "phase11_campaign_spot": {
+    "selection_mode": "best_active_fallback",
+    "campaign_window": {
+      "start": "2025-12-01",
+      "end": "2026-02-24"
+    },
+    "metrics": {
+      "profit_factor_net": 0.85086728543798,
+      "sharpe_ratio": -0.822485201529191,
+      "max_drawdown": -0.02700086313087079,
+      "num_trades": 94,
+      "total_return": -0.012752784966289621,
+      "kill_events": 6
+    },
+    "deployment_readiness": {
+      "ready": false,
+      "reason": "kill_switch_triggered;profit_factor_below_threshold;sharpe_below_threshold",
+      "observed_days": 80,
+      "total_trades": 94,
+      "metrics": {
+        "profit_factor_net": 0.85086728543798,
+        "sharpe_ratio": -0.822485201529191,
+        "max_drawdown": -0.02700086313087079,
+        "net_return": -0.012752784966289621,
+        "turnover": 5.69568012635104
+      }
+    },
+    "promotion_recommendation": {
+      "recommend_promotion": false,
+      "reason": "readiness_not_met:kill_switch_triggered;profit_factor_below_threshold;sharpe_below_threshold,ramp_action_not_promote:ROLLBACK,recommended_stage_unchanged",
+      "policy_exceptions": [
+        "readiness_not_met:kill_switch_triggered;profit_factor_below_threshold;sharpe_below_threshold",
+        "ramp_action_not_promote:ROLLBACK",
+        "recommended_stage_unchanged"
+      ],
+      "readiness_ready": false,
+      "readiness_reason": "kill_switch_triggered;profit_factor_below_threshold;sharpe_below_threshold",
+      "ramp_action": "ROLLBACK",
+      "current_stage": "paper",
+      "recommended_stage": "paper",
+      "recommended_capital_fraction": 0.0
+    },
+    "completion_gate": {
+      "passed": false,
+      "reason": "failed_profit_factor_net,failed_sharpe_net,failed_kill_events,failed_deployment_readiness,failed_capital_ramp_promote",
+      "checks": {
+        "profit_factor_net": false,
+        "sharpe_net": false,
+        "max_drawdown_abs": true,
+        "num_trades": true,
+        "kill_events": false,
+        "deployment_readiness": false,
+        "capital_ramp_promote": false
+      },
+      "criteria": {
+        "min_profit_factor_net": 1.0,
+        "min_sharpe_net": 0.5,
+        "max_drawdown_abs": 0.3,
+        "min_trades": 80,
+        "max_kill_events": 0
+      },
+      "observed": {
+        "profit_factor_net": 0.85086728543798,
+        "sharpe_ratio": -0.822485201529191,
+        "max_drawdown_abs": 0.02700086313087079,
+        "num_trades": 94,
+        "kill_event_count": 6,
+        "deployment_readiness": false,
+        "capital_ramp_action": "ROLLBACK"
+      }
+    }
+  },
+  "phase11_4h_threshold_sensitivity": [
+    {
+      "scenario": "spot",
+      "policy": "default_threshold",
+      "profit_factor_net": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "kill_events": 0,
+      "deployment_ready": false,
+      "deployment_reason": "insufficient_trades;profit_factor_below_threshold;sharpe_below_threshold"
+    },
+    {
+      "scenario": "spot",
+      "policy": "looser_threshold",
+      "profit_factor_net": 1.1516600501423204,
+      "sharpe_ratio": 1.363972021770645,
+      "num_trades": 145,
+      "kill_events": 25,
+      "deployment_ready": false,
+      "deployment_reason": "kill_switch_triggered"
+    },
+    {
+      "scenario": "margin",
+      "policy": "default_threshold",
+      "profit_factor_net": 0.0,
+      "sharpe_ratio": 0.0,
+      "num_trades": 0,
+      "kill_events": 0,
+      "deployment_ready": false,
+      "deployment_reason": "insufficient_trades;profit_factor_below_threshold;sharpe_below_threshold"
+    },
+    {
+      "scenario": "margin",
+      "policy": "looser_threshold",
+      "profit_factor_net": 1.1345610473507217,
+      "sharpe_ratio": 1.2199380762610668,
+      "num_trades": 145,
+      "kill_events": 25,
+      "deployment_ready": false,
+      "deployment_reason": "kill_switch_triggered"
+    }
+  ],
+  "key_findings": [
+    "The strongest observed futures EWMA candidate produced PF Net above 1.0 and positive Sharpe, but still failed promotion gates.",
+    "The 1h spot and margin threshold calibration campaigns increased trade count but remained below profitability and Sharpe thresholds.",
+    "A matched 4h default-threshold replay produced zero trades, while a looser 4h threshold recovered PF-positive and positive-Sharpe regions but still failed readiness because kill-switch events remained elevated.",
+    "Governance and kill-switch layers are doing useful work: they are blocking promotion despite partial positive edge regions."
+  ]
+}
