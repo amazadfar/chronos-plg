@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "chronos-plg"
 version = "0.1.0"
-description = "Phase-gated BTC trading research platform with probabilistic forecasting, cost-aware backtesting, and paper-trading governance"
+description = "Governed BTC trading research platform with probabilistic forecasting, cost-aware backtesting, and paper-trading controls"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
