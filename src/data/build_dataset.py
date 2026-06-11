@@ -24,6 +24,7 @@ from src.data.market_metadata import get_contract_metadata
 from src.data.macro_fetcher import MacroFetcher
 from src.data.liquidation_collector import LiquidationCollector
 from src.data.labels import LabelGenerator
+from src.data.technical_features import compute_technical_features
 
 logger = logging.getLogger(__name__)
 
@@ -543,6 +544,12 @@ class DatasetBuilder:
         vol_mean = volume.rolling(window=settings.volume_zscore_window).mean()
         vol_std = volume.rolling(window=settings.volume_zscore_window).std()
         features["volume_zscore"] = (volume - vol_mean) / (vol_std + 1e-8)
+
+        technical_features = compute_technical_features(ohlcv)
+        overlapping = sorted(set(features.columns).intersection(technical_features.columns))
+        if overlapping:
+            raise ValueError(f"Technical features overlap existing feature columns: {overlapping}")
+        features = pd.concat([features, technical_features], axis=1)
         
         # ===== Funding rate features =====
         logger.info("Computing funding rate features...")
