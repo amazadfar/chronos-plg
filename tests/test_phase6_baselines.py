@@ -66,6 +66,47 @@ def test_infer_feature_columns_filters_leakage_columns():
     assert "regime_code" not in features
 
 
+def test_infer_feature_columns_supports_feature_set_ablation():
+    idx = pd.date_range("2024-01-01", periods=10, freq="4h", tz="UTC")
+    data = pd.DataFrame(
+        {
+            "return_1": np.random.randn(10),
+            "realized_vol_6": np.random.randn(10),
+            "tech_rsi_14": np.random.randn(10),
+            "tech_macd_hist": np.random.randn(10),
+            "forward_return": np.random.randn(10),
+            "close": np.arange(10),
+        },
+        index=idx,
+    )
+
+    assert infer_feature_columns(data, feature_set="core") == ["return_1", "realized_vol_6"]
+    assert infer_feature_columns(data, feature_set="technical") == ["tech_rsi_14", "tech_macd_hist"]
+    assert infer_feature_columns(data, feature_set="all") == [
+        "return_1",
+        "realized_vol_6",
+        "tech_rsi_14",
+        "tech_macd_hist",
+    ]
+
+
+def test_infer_feature_columns_excludes_sparse_unusable_columns():
+    idx = pd.date_range("2024-01-01", periods=10, freq="4h", tz="UTC")
+    data = pd.DataFrame(
+        {
+            "return_1": np.random.randn(10),
+            "open_interest": [np.nan] * 10,
+            "tech_rsi_14": np.random.randn(10),
+            "tech_adx_14": [np.nan] * 6 + list(np.random.randn(4)),
+            "forward_return": np.random.randn(10),
+        },
+        index=idx,
+    )
+
+    assert infer_feature_columns(data, feature_set="all") == ["return_1", "tech_rsi_14"]
+    assert infer_feature_columns(data, feature_set="technical") == ["tech_rsi_14"]
+
+
 def test_freeze_protocol_and_fold_schedule(tmp_path):
     protocol = BaselineProtocol(
         name="test_protocol",

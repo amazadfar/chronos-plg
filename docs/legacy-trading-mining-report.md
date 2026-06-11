@@ -2,7 +2,7 @@
 
 Date: 2026-06-11  
 Scope: `/home/namiral/Projects/Inactive/Trading/legacy-trading` -> Chronos-PLG research upgrades  
-Status: Initial evidence pass with one low-risk feature port implemented
+Status: Initial evidence pass with one low-risk feature port implemented and benchmarked
 
 ## Executive Summary
 
@@ -173,6 +173,40 @@ Validation performed:
 - Project lint gate: passed.
 - Syntax compile: passed.
 
+## First Benchmark Result
+
+The first matched ablation used the rebuilt 1h processed dataset and the spot taker-discounted scenario:
+
+```bash
+./.venv/bin/python scripts/run_feature_ablation.py \
+  --timeframe 1h \
+  --feature-sets core,all \
+  --scenario binance_spot_taker_discounted \
+  --no-progress \
+  --output-dir data/results/legacy_feature_ablation_1h_spot_core_all_v2
+```
+
+Feature sets:
+
+- `core`: 28 non-technical benchmark features after sparse unusable market-structure columns were excluded.
+- `all`: 73 features total, combining 28 core features with 45 legacy-derived `tech_*` features.
+
+Result:
+
+| Feature set | Model | Sharpe | Net PF | Total return | Max drawdown | Trades | Folds |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `core` | LightGBM | -0.8410 | 0.2113 | -3.53% | -3.53% | 66 | 242 |
+| `all` | LightGBM | -1.0965 | 0.0679 | -2.56% | -2.56% | 44 | 242 |
+| `core` | EWMA | -0.2528 | 0.8329 | -1.81% | -2.90% | 191 | 242 |
+| `all` | EWMA | -0.2528 | 0.8329 | -1.81% | -2.90% | 191 | 242 |
+
+Interpretation:
+
+- The technical feature bundle trained successfully, but it did not improve the current LightGBM policy under this protocol.
+- EWMA is unchanged because it does not consume feature columns.
+- RandomWalk remains a no-trade reference and should not be treated as the best active strategy.
+- This is a prune-or-refine signal, not a profitability signal. The next useful step is family-level ablation and/or less conservative signal gating before promoting any legacy-derived feature family.
+
 ## Risks and Controls
 
 ### Leakage Risk
@@ -205,9 +239,8 @@ Control:
 
 ## Highest-Value Next Candidates
 
-1. Causal market-structure regime detector.
-2. Technical-feature benchmark campaign against the current EWMA/LightGBM/Chronos evidence.
+1. Family-level technical feature ablation to identify whether any subset is useful despite the full bundle underperforming.
+2. Causal market-structure regime detector.
 3. Microstructure/readiness upgrade inspired by the triangular-arbitrage engine.
 4. Experiment registry/model cards for every mined idea.
 5. Optional external probability/event features once timestamp integrity is proven.
-

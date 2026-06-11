@@ -74,6 +74,7 @@ smoke-check = "scripts.smoke_check:main"
 run-paper-trading = "scripts.run_paper_trading:main"
 generate-public-report = "scripts.generate_public_report:main"
 plot-public-results = "scripts.plot_public_results:main"
+run-feature-ablation = "scripts.run_feature_ablation:main"
 
 [project.urls]
 Homepage = "https://github.com/amazadfar/chronos-plg"

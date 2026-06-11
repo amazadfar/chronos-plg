@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Run Phase 6 baseline protocol with frozen folds and net-cost engine.
+Run the frozen baseline protocol with folds and net-cost engine.
 
 Usage:
     python scripts/run_baselines.py --data data/processed/btc_4h.parquet
@@ -30,11 +30,13 @@ from src.backtest.engine import BacktestEngine, BacktestResult
 from src.backtest.report import BacktestReport
 from src.data.quality_gate import enforce_degraded_run_gate
 from src.evaluation.phase6_baselines import (
+    FEATURE_SET_CHOICES,
     build_chronos_advancement_gate,
     build_leaderboard,
     freeze_fold_schedule,
     infer_feature_columns,
     resolve_model_configs,
+    summarize_feature_columns,
     write_gate_artifact,
     write_leaderboard_artifacts,
     write_protocol_freeze,
@@ -56,7 +58,7 @@ def _write_json(path: Path, payload: dict) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run Phase 6 baseline protocol")
+    parser = argparse.ArgumentParser(description="Run frozen baseline protocol")
     parser.add_argument(
         "--timeframe",
         type=str,
@@ -94,6 +96,16 @@ def parse_args() -> argparse.Namespace:
         choices=["threshold", "net_edge"],
         default="threshold",
         help="Signal entry policy mode",
+    )
+    parser.add_argument(
+        "--feature-set",
+        type=str,
+        choices=FEATURE_SET_CHOICES,
+        default="all",
+        help=(
+            "Feature family selection for feature-aware models: "
+            "all=core+technical, core=pre-mining features only, technical=tech_* only"
+        ),
     )
     parser.add_argument(
         "--net-edge-cost-mult",
@@ -193,9 +205,10 @@ def main() -> int:
         scenario_name = args.scenario or protocol.scenario
         scenario = get_scenario_profile(scenario_name)
         start_date = args.start_date if args.start_date is not None else protocol.start_date
-        feature_columns = infer_feature_columns(data)
+        feature_columns = infer_feature_columns(data, feature_set=args.feature_set)
+        feature_summary = summarize_feature_columns(feature_columns)
         logger.info("Using protocol=%s scenario=%s start_date=%s", protocol.name, scenario_name, start_date)
-        logger.info("Feature columns inferred: %s", len(feature_columns))
+        logger.info("Feature set=%s feature summary=%s", args.feature_set, feature_summary)
 
         data_quality_gate_path = output_dir / "phase11_data_quality_gate.json"
         gate = enforce_degraded_run_gate(
@@ -336,6 +349,9 @@ def main() -> int:
             "protocol": protocol.name,
             "scenario": scenario_name,
             "start_date": start_date,
+            "feature_set": args.feature_set,
+            "feature_summary": feature_summary,
+            "feature_columns": feature_columns,
             "n_models": len(results),
             "n_folds": len(folds),
             "leaderboard_top": leaderboard.iloc[0].to_dict() if not leaderboard.empty else None,
@@ -345,7 +361,8 @@ def main() -> int:
                 for name, payload in baseline_decisions.items()
             },
             "reproducible_command": (
-                f"python scripts/run_baselines.py --data {args.data} --protocol {protocol.name}"
+                f"python scripts/run_baselines.py --data {data_path} --protocol {protocol.name} "
+                f"--feature-set {args.feature_set}"
             ),
         }
         summary_path = output_dir / f"baseline_phase6_summary_{protocol.name}.json"
@@ -353,19 +370,19 @@ def main() -> int:
         artifacts.append(str(summary_path))
 
         print("\n" + "=" * 80)
-        print("PHASE 6 BASELINE LEADERBOARD")
+        print("FROZEN BASELINE LEADERBOARD")
         print("=" * 80)
         print(leaderboard.to_string(index=False))
         print("\nChronos advancement gate:", "PASS" if gate_payload.get("passed") else "FAIL")
         print("Gate artifact:", gate_path)
-        print("\nPhase 9 decision outcomes:")
+        print("\nDecision outcomes:")
         for model_name, decision_payload in baseline_decisions.items():
             print(f" - {model_name}: {decision_payload['outcome']} ({decision_payload['reason']})")
         return 0
     except Exception as exc:
         status = "failed"
         error = str(exc)
-        logger.exception("Phase 6 baseline run failed")
+        logger.exception("Baseline protocol run failed")
         return 1
     finally:
         finalize_experiment_run(

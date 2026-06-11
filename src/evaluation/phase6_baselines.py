@@ -17,21 +17,90 @@ from src.evaluation.walk_forward import WalkForwardEvaluator
 from src.models.baselines import EWMABaseline, LightGBMQuantileBaseline, RandomWalkBaseline
 
 
-def infer_feature_columns(data: pd.DataFrame) -> list[str]:
+FEATURE_SET_CHOICES = ("all", "core", "technical")
+TECHNICAL_FEATURE_PREFIX = "tech_"
+
+
+def infer_feature_columns(
+    data: pd.DataFrame,
+    feature_set: str = "all",
+    min_non_null_ratio: float = 0.5,
+) -> list[str]:
     """Infer numeric feature columns with leakage-safe exclusions."""
+    if feature_set not in FEATURE_SET_CHOICES:
+        available = ", ".join(FEATURE_SET_CHOICES)
+        raise ValueError(f"Unknown feature_set '{feature_set}'. Available: {available}")
+    if not 0.0 <= min_non_null_ratio <= 1.0:
+        raise ValueError("min_non_null_ratio must be between 0.0 and 1.0")
+
     excluded_tokens = ("forward_", "regime", "hist_q", "timestamp")
     excluded_exact = {"open", "high", "low", "close", "volume"}
 
-    features = [
+    candidate_features = [
         col
         for col in data.columns
         if pd.api.types.is_numeric_dtype(data[col])
         and col not in excluded_exact
         and not any(token in col for token in excluded_tokens)
+        and float(data[col].notna().mean()) >= min_non_null_ratio
     ]
+
+    if feature_set == "core":
+        features = [
+            col for col in candidate_features if not col.startswith(TECHNICAL_FEATURE_PREFIX)
+        ]
+    elif feature_set == "technical":
+        features = [
+            col for col in candidate_features if col.startswith(TECHNICAL_FEATURE_PREFIX)
+        ]
+    else:
+        features = candidate_features
+
     if not features:
-        raise ValueError("No candidate numeric feature columns were inferred.")
+        raise ValueError(f"No candidate numeric feature columns were inferred for feature_set={feature_set}.")
     return features
+
+
+def summarize_feature_columns(feature_columns: list[str]) -> dict[str, Any]:
+    """Summarize selected feature columns for experiment artifacts."""
+    technical = [col for col in feature_columns if col.startswith(TECHNICAL_FEATURE_PREFIX)]
+    return {
+        "total": len(feature_columns),
+        "core": len(feature_columns) - len(technical),
+        "technical": len(technical),
+        "technical_families": _technical_family_counts(technical),
+    }
+
+
+def _technical_family_counts(feature_columns: list[str]) -> dict[str, int]:
+    family_by_token = {
+        "price_candle": (
+            "hlc3",
+            "ohlc4",
+            "range",
+            "body",
+            "wick",
+            "close_position",
+            "ha_",
+        ),
+        "trend_ma": ("sma", "ema", "pma"),
+        "momentum": ("rsi", "macd", "stoch", "cci"),
+        "volatility": ("atr", "bbands", "fib"),
+        "volume": ("obv", "vroc", "volume"),
+        "directional_strength": ("plus_di", "minus_di", "adx"),
+    }
+    counts = {family: 0 for family in family_by_token}
+    counts["other"] = 0
+    for col in feature_columns:
+        matched = False
+        for family, tokens in family_by_token.items():
+            if any(token in col for token in tokens):
+                counts[family] += 1
+                matched = True
+                break
+        if not matched:
+            counts["other"] += 1
+    return {family: count for family, count in counts.items() if count}
 
 
 def _stable_payload_hash(payload: dict[str, Any]) -> str:

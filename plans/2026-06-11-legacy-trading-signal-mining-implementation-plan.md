@@ -11,6 +11,7 @@ Legacy Trading Archive Signal Mining and Chronos-PLG Research Upgrade
 - Status: In Progress
 - Related issue / task: Mine `/home/namiral/Projects/Inactive/Trading/legacy-trading` for reusable trading ideas and port the strongest candidates into Chronos-PLG.
 - Related analysis report: `docs/legacy-trading-mining-report.md`
+- Parent roadmap: `plans/2026-06-08-chronos-portfolio-publication-research-roadmap-implementation-plan.md`
 - Related PRs: None yet
 - Related docs: `README.md`, `docs/results.md`, `docs/project-status.md`, `docs/roadmap.md`
 
@@ -19,6 +20,8 @@ Legacy Trading Archive Signal Mining and Chronos-PLG Research Upgrade
 The legacy trading archive should become a research-hypothesis mine for Chronos-PLG. The archive contains many useful ideas across technical indicators, market structure, microstructure, execution governance, prediction-market calibration, options, TSE ingestion, and NLP/event workflows, but it also contains generated data, old virtual environments, nested repositories, hardcoded credentials, and hindsight-prone experimental scripts.
 
 The implementation strategy is to extract ideas, not code. Each candidate must be rewritten inside Chronos-PLG's existing causal data pipeline, validated with leakage tests, benchmarked through walk-forward experiments, and published only as evidence-backed research.
+
+This plan is not a replacement for the portfolio/publication roadmap. It is the active research execution track under that roadmap: the publication plan defines the GitHub/resume story and continuous-release discipline, while this plan supplies the next evidence-generating experiments that can be published as results mature.
 
 ## Problem / Opportunity Statement
 
@@ -29,7 +32,8 @@ Chronos-PLG is currently a credible governed trading research platform, but its 
 - [x] Inventory the legacy archive at a high level.
 - [x] Identify reusable idea clusters and implementation risks.
 - [x] Port one low-risk candidate into Chronos-PLG.
-- [ ] Benchmark the new technical-feature set against the current evidence baseline.
+- [x] Run the first matched core-vs-technical feature benchmark.
+- [ ] Run family-level technical-feature ablations.
 - [ ] Add a causal market-structure regime detector.
 - [ ] Add microstructure/readiness ideas from the triangular-arbitrage engine.
 - [ ] Build continuous experiment cards for all mined ideas.
@@ -199,15 +203,15 @@ Use a four-lane research pipeline:
   - Ablation table by feature family.
   - Public-safe experiment card.
 - Checklist:
-  - [ ] Freeze baseline data/timeframe/scenarios.
-  - [ ] Run current feature baseline.
-  - [ ] Run technical-feature candidate.
+  - [x] Freeze baseline data/timeframe/scenarios for the first benchmark.
+  - [x] Run current feature baseline.
+  - [x] Run technical-feature candidate.
   - [ ] Run ablations: momentum, volume, volatility, candle/range.
   - [ ] Compare net PF, Sharpe, trade count, drawdown, kill events, readiness.
 - Validation:
   - Existing tests plus benchmark reproducibility hash.
 - Exit criteria:
-  - Clear keep/prune decision per feature family.
+  - Clear keep/prune/refine decision per feature family.
 - Green-light cue:
   - At least one feature family improves a primary or secondary metric without readiness regression, or a documented negative result explains why not.
 - Rollback / containment:
@@ -408,6 +412,8 @@ Use a four-lane research pipeline:
 |---|---|---|---|---|---|---|
 | 2026-06-11 | Phase 1 | Inventory pass over legacy archive and representative files | `docs/legacy-trading-mining-report.md` | N/A | Completed | Archive contains secrets; do not publish raw archive |
 | 2026-06-11 | Phase 1 | Added causal technical feature module and integrated with `DatasetBuilder` | `src/data/technical_features.py`, `src/data/build_dataset.py`, `tests/test_technical_features.py` | focused pytest, lint, py_compile | Passed | No new dependencies |
+| 2026-06-11 | Phase 2 | Added feature-set controls for core/all/technical baselines and an ablation CLI | `src/evaluation/phase6_baselines.py`, `scripts/run_baselines.py`, `scripts/run_feature_ablation.py`, `tests/test_phase6_baselines.py`, `pyproject.toml` | focused pytest, py_compile, dry run | Passed | Guard prevents invalid core-vs-all comparisons when processed data has no `tech_*` columns |
+| 2026-06-11 | Phase 2 | Rebuilt local 1h processed dataset and ran matched core-vs-all 1h spot ablation | local ignored `data/processed/btc_1h.parquet`, ignored `data/results/legacy_feature_ablation_1h_spot_core_all_v2/*` | full ablation run | Completed with negative result | LightGBM trained 242 folds in both arms; `all` used 45 technical features but underperformed `core` on Sharpe/net PF |
 
 ## Final Approval Gate
 
